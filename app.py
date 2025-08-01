@@ -7,7 +7,7 @@ app = Flask(__name__)
 CORS(app)  # Allow cross-origin requests from your Chrome extension
 
 # CSV file from GitHub
-CSV_URL = "https://raw.githubusercontent.com/jphsu87/my-powerball-api-2/main/powerball_data.csv"
+CSV_URL = "https://raw.githubusercontent.com/jphsu87/my-powerball-api/main/powerball_data.csv"
 
 # Load the CSV once
 df = pd.read_csv(CSV_URL)
