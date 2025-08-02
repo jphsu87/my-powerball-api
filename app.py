@@ -6,16 +6,19 @@ from datetime import datetime
 app = Flask(__name__)
 CORS(app)
 
-# CSV file from GitHub
+# CSV file from GitHub (cleaned up path)
 CSV_URL = "https://raw.githubusercontent.com/jphsu87/my-powerball-api/main/powerball_data.csv"
 
-# Load the CSV once
-df = pd.read_csv(CSV_URL)
-df['draw_date'] = pd.to_datetime(df['draw_date'])
+# Helper function to load and parse the CSV
+def load_data():
+    df = pd.read_csv(CSV_URL)
+    df['draw_date'] = pd.to_datetime(df['draw_date'])
+    return df
 
 # Endpoint: Get latest winning numbers
 @app.route('/latest', methods=['GET'])
 def get_latest():
+    df = load_data()
     latest_row = df.loc[df['draw_date'].idxmax()]
     return jsonify({
         "date": latest_row['draw_date'].strftime('%Y-%m-%d'),
@@ -26,6 +29,7 @@ def get_latest():
 # Endpoint: Get frequency of all numbers (including Powerball)
 @app.route('/frequency', methods=['GET'])
 def get_frequency():
+    df = load_data()
     frequency = {}
     for _, row in df.iterrows():
         numbers = [int(row[f'number{i}']) for i in range(1, 6)]
@@ -38,6 +42,7 @@ def get_frequency():
 # Endpoint: Get history within date range
 @app.route('/history', methods=['GET'])
 def get_history():
+    df = load_data()
     start = request.args.get('start')
     end = request.args.get('end')
 
