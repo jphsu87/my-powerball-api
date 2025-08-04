@@ -57,7 +57,7 @@ def get_history():
             "powerball": int(row['powerball'])
         })
 
-    return jsonify(results)
+    return jsonify(draws=results)
 
 # Optional: Reload CSV data manually
 @app.route('/reload', methods=['POST'])
